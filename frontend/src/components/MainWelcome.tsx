@@ -1,3 +1,5 @@
+import './Filter.css';
+
 function MainWelcome() {
   return (
     <>
