@@ -2,12 +2,10 @@ import { useState } from 'react';
 import BookList from '../components/BookList';
 import Filter from '../components/Filter';
 import MainWelcome from '../components/MainWelcome';
-import { useNavigate } from 'react-router-dom';
 import '../components/Filter.css';
 import CartSummary from '../components/CartSummary';
 
 function MainPage() {
-  const navigate = useNavigate();
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   return (
