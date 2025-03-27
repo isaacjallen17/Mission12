@@ -1,4 +1,6 @@
-import { Book } from './types/Books';
+import { useCart } from '../context/CartContext';
+import { Book } from '../types/Books';
+import { CartItem } from '../types/CartItem';
 import { useEffect, useState } from 'react';
 
 function BookList({ selectedCategories }: { selectedCategories: string[] }) {
@@ -8,6 +10,7 @@ function BookList({ selectedCategories }: { selectedCategories: string[] }) {
   const [totNumBooks, setTotNumBooks] = useState<number>(0);
   const [totPages, setTotPages] = useState<number>(0);
   const [order, setOrder] = useState<string>('title');
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -25,6 +28,26 @@ function BookList({ selectedCategories }: { selectedCategories: string[] }) {
     };
     fetchBooks();
   }, [numBooksPage, pageNum, totNumBooks, order, selectedCategories]);
+
+  const handleAddToCart = (
+    bookID: number,
+    title: string,
+    author: string,
+    category: string,
+    price: number
+  ) => {
+    const newItem: CartItem = {
+      bookID: bookID,
+      title: title,
+      author: author,
+      category: category,
+      price: price,
+      total: price,
+      quantity: 1,
+    };
+    addToCart(newItem);
+  };
+
   return (
     <>
       <label>
@@ -45,7 +68,11 @@ function BookList({ selectedCategories }: { selectedCategories: string[] }) {
       <br />
       <br />
       {books.map((b) => (
-        <div id="bookCard" className="card" key={b.bookID}>
+        <div
+          id="bookCard"
+          className="card shadow-sm p-3 mb-5 rounded bg-secondary p-5 text-light"
+          key={b.bookID}
+        >
           <h3 className="card-title">
             <strong>{b.title}</strong>
             <br />
@@ -72,6 +99,20 @@ function BookList({ selectedCategories }: { selectedCategories: string[] }) {
                 <strong>Price:</strong> ${b.price}
               </li>
             </ul>
+            <button
+              className="btn btn-success"
+              onClick={() =>
+                handleAddToCart(
+                  b.bookID,
+                  b.title,
+                  b.author,
+                  b.category,
+                  b.price
+                )
+              }
+            >
+              Add To Cart
+            </button>
           </div>
         </div>
       ))}
